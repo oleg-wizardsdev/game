@@ -5,7 +5,13 @@ class Game {
     this.createElements();
     this.handlers();
     this.checkWin = this.checkWin.bind(this);
-    this.counter = 0
+  }
+
+  init() {
+    this.counter = 0;
+    this.score.innerHTML = this.counter
+
+    this.startGame();
   }
 
   createElements() {
@@ -24,7 +30,7 @@ class Game {
   }
 
   handlers() {
-    this.btn.addEventListener('click', this.startGame.bind(this));
+    this.btn.addEventListener('click', this.init.bind(this));
   }
 
   startGame() {
@@ -43,14 +49,12 @@ class Game {
   }
 
   checkScore() {
-    if(this.counter < -4) {
-      alert('YOU LOSE')
-      this.counter = 0
-      this.score.innerHTML = this.counter
+    if(this.counter === -5) {
+      alert('LOSE GAME')
+      this.init()
     } else if(this.counter > 4){
-      alert('YOU WON')
-      this.counter = 0
-      this.score.innerHTML = this.counter
+      alert('WIN GAME')
+      this.init()
     }
   }
 
@@ -59,13 +63,13 @@ class Game {
     const winItem = this.randomNumber();
 
     if(+event.target.innerText === winItem){
-      this.output.innerHTML = 'WIN'
       this.score.innerHTML = ++this.counter
-      this.checkScore();
+      this.output.innerHTML = 'WIN'
+      setTimeout(this.checkScore.bind(this),0)
     }else{
-      this.output.innerHTML = 'LOSE'
       this.score.innerHTML = --this.counter
-      this.checkScore();
+      this.output.innerHTML = 'LOSE'
+      setTimeout(this.checkScore.bind(this),0)
     }
     this.item.removeEventListener('click', this.checkWin);
     this.startGame()
@@ -92,8 +96,8 @@ class Game {
     return elem;
   }
 }
-
+const ques = prompt("HOW ITEM?", '3')
 const game = new Game({
   container: '.game',
-  items: 3
+  items: +ques
 })
